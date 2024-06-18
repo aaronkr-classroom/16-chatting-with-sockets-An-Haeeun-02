@@ -18,21 +18,23 @@ module.exports = (io) => {
     Message.find({})
       .sort({ createdAt: -1 })
       .limit(10)
-      .then((messages) => {
-        messages.reverse().forEach((message) => {
+      .then(messages => {
+        messages.reverse().forEach(msg => {
           io.emit("message", message);
         });
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(`error: ${error.message}`);
       });
 
-    // Lesson 32.1 (p. 464)
+    socket.on("disconnect", () => {
+      console.log("User disconnected!");
+    });
 
     /**
      * Listing 31.2 (p. 451)
      */
-    socket.on("message", (data) => {
+    socket.on("message", data => {
       /**
        * Listing 31.5 (p. 453)
        * 소켓 데이터의 수신
@@ -41,8 +43,9 @@ module.exports = (io) => {
         content: data.content,
         userFullName: data.fullName,
         username: data.username,
-        userId: data.userId,
+        userId: data.userId
       };
+
       /**
        * Listing 31.10 (p. 459)
        * message 저장
@@ -52,7 +55,7 @@ module.exports = (io) => {
         .then(() => {
           io.emit("message", msgAttr);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(`error: ${error.message}`);
         });
     });

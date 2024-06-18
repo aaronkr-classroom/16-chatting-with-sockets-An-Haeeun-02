@@ -28,23 +28,17 @@ $(document).ready(() => {
   });
 
   /**
-   * Listing 32.3 (p. 467)
-   * 메시지 수신 시 채팅 아이콘 애니메이팅
-   */
-
-  /**
-   * Listing 32.2 (p. 465)
-   * 사용자 접속이 끊겼을 때 메시지 출력
-   */
-
-  /**
    * Listing 31.12 (p. 460)
    * 최근 메시지 표시
    */
-  socket.on("load all messages", (data) => {
-    data.forEach((message) => {
-      displayMessage(message);
+  socket.on("load all messages", data => {
+    data.forEach(msg => {
+      displayMessage(msg);
     });
+  });
+
+  socket.on("message", (message) => {
+    displayMessage(message);
   });
 
   $("#modal-button").click(() => {
@@ -168,4 +162,4 @@ let displayMessage = (message) => {
 let getCurrentUserClass = (id) => {
   let userId = $("#chat-user-id").val();
   return userId === id ? "current-user" : "";
-};
+}
